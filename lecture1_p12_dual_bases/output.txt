@@ -1,0 +1,27 @@
+=== Dual basis of the columns of a random 5x5 matrix P ===
+max |r_i b_j - delta_ij| = 2.7755575615628914e-16
+x = sum_i (r_i x) b_i: True   max error 2.220446049250313e-16
+dual_basis(P) close to np.linalg.inv(P): True
+
+=== Lagrange polynomials for the nodes -1, 0, 1 ===
+V =
+ [[ 1. -1.  1.]
+ [ 1.  0.  0.]
+ [ 1.  1.  1.]]
+V^{-1} (column k = coefficients of L_k in the basis 1, x, x^2) =
+ [[ 0.   1.   0. ]
+ [-0.5  0.   0.5]
+ [ 0.5 -1.   0.5]]
+equals the coefficients of x(x-1)/2, 1-x^2, x(x+1)/2: True
+L_j(t_k) = (V C)_{kj} = delta_jk: True
+values 1, 2, 5 at -1, 0, 1 give the coefficients [2. 2. 1.] (expected 2 + 2x + x^2)
+
+=== Interpolation ===
+sin(3t), 9 nodes on [-1, 1]: max |p(t_k) - f(t_k)| = 1.92e-14, max |p - f| on the interval = 8.138e-04, agrees with np.linalg.solve: True
+    max error on the middle fifth = 3.443e-05, max error near the ends = 8.138e-04 (at t = -0.924)
+    saved figures/p12_sin.png
+1/(1+t^2), 21 nodes on [-5, 5]: max |p(t_k) - f(t_k)| = 3.71e-08, max |p - f| on the interval = 5.982e+01, agrees with np.linalg.solve: True
+    max error on the middle fifth = 3.280e-03, max error near the ends = 5.982e+01 (at t = 4.875)
+    with 21 Chebyshev nodes instead: max |p - f| = 1.533e-02
+    Lebesgue constant max_t sum_k |L_k(t)|: equally spaced 1.099e+04, Chebyshev 2.901
+    saved figures/p12_runge.png
