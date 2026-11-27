@@ -1,0 +1,43 @@
+=== Example 6.107 ===
+L =
+ [[1. 0. 0.]
+ [2. 1. 0.]
+ [4. 3. 1.]] 
+U =
+ [[2. 1. 1.]
+ [0. 1. 1.]
+ [0. 0. 2.]]
+L, U as in the notes: True
+det(A) = prod diag(U) = 4.0
+solution of A x = (5, 13, 31): [1. 2. 1.]
+
+=== Random 6x6 matrices ===
+100 matrices: L @ U == A, L lower and U upper triangular: True
+solve_lu agrees with np.linalg.solve: True (largest difference 3.7e-12)
+
+=== A tiny pivot ===
+L =
+ [[1.e+00 0.e+00]
+ [1.e+17 1.e+00]] 
+U =
+ [[ 1.e-17  1.e+00]
+ [ 0.e+00 -1.e+17]]
+L @ U =
+ [[1.e-17 1.e+00]
+ [1.e+00 0.e+00]]   (should be A)
+solve_lu without pivoting: [0. 1.]
+with partial pivoting (rows swapped): [1. 1.]
+np.linalg.solve: [1. 1.]
+exact solution: x1 = 1/(1 - 1e-17), x2 = (1 - 2e-17)/(1 - 1e-17), both 1 to 16 digits
+
+=== Partial pivoting on random matrices ===
+P @ A == L @ U and all multipliers |L_ij| <= 1: True
+
+=== Sherman-Morrison updates of (X^T X)^{-1} ===
+initial inverse: max |M Minv - I| = 9.992007221626409e-16
+max |SM result - recomputed inverse| = 9.97e-18 (relative 2.06e-15)
+both agree with np.linalg.inv: True True
+time, 100 Sherman-Morrison updates:                      0.64 ms (6 us per update)
+time, one inverse from scratch (own LU):                 0.36 ms (incl. forming X^T X)
+time, 100 inverses from scratch, one per row (own LU):  34.61 ms -> 54x slower than Sherman-Morrison
+time, 100 inverses from scratch with np.linalg.inv:      2.82 ms
