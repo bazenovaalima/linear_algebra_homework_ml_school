@@ -1,0 +1,14 @@
+saved figures/p6_gallery.png
+
+=== Shoelace formula on the image of the unit square ===
+matrix                          shoelace area   det(A)  equal?
+(a) stretch                            2.0000   2.0000  True
+(b) rotation by 90 degrees             1.0000   1.0000  True
+(c) reflection in the x-axis          -1.0000  -1.0000  True
+(d) shear                              1.0000   1.0000  True
+(e) singular                           0.0000   0.0000  True
+(f) matrix of Figure 4                 5.0000   5.0000  True
+
+unit square counterclockwise: 1.0   clockwise: -1.0
+area of the letter F: 0.2575
+100 random 2x2 matrices: shoelace area of A(square) == det(A) and area(A(F)) == det(A) * area(F): True
