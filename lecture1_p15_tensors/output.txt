@@ -1,0 +1,44 @@
+=== Reshaping and unfoldings ===
+T[i, j, k] == T.reshape(-1)[12*i + 4*j + k] for all i, j, k: True
+T.reshape(2, 12) =
+ [[ 0  1  2  3  4  5  6  7  8  9 10 11]
+ [12 13 14 15 16 17 18 19 20 21 22 23]]
+T.transpose(1, 0, 2).reshape(3, 8) =
+ [[ 0  1  2  3 12 13 14 15]
+ [ 4  5  6  7 16 17 18 19]
+ [ 8  9 10 11 20 21 22 23]]
+ranks: 2 and 2  (np.linalg.matrix_rank: 2 2 )
+third unfolding T.transpose(2, 0, 1).reshape(4, 6) has rank 2
+
+=== Table 1 ===
+matrix product  ij,jk->ik  True
+trace           ii->       True
+dot product     i,i->      True
+outer product   i,j->ij    True
+transpose       ij->ji     True
+bilinear form   i,ij,j->   True
+
+=== A batch of 100 random 4x4 matrices ===
+traces   einsum('bii->b')        == loop: True
+products einsum('bij,bjk->bik')  == loop: True
+first three traces: [ 1.5272  2.856  -3.9057]
+time: einsum 11.6 us, Python loop 112.7 us (loop is 10x slower)
+
+=== Kronecker product (Remark 11.17) ===
+np.kron(A, B).shape = (6, 20)
+(A @ X @ B.T).reshape(-1) == np.kron(A, B) @ X.reshape(-1): True
+for A, B of size 100x100: np.kron(A, B) is 10000x10000, i.e. 1e+08 numbers = 0.8 GB in float64
+multiplications: kron matrix-vector 1e+08, A X B^T directly 2e+06
+n = 50: both ways agree: True
+n = 50: A @ X @ B.T 0.005 ms, kron + matvec 2.5 ms (matvec alone 0.3 ms); kron stores 6.25e+06 numbers
+
+=== Rank-one tensors (Example 11.20) ===
+T.shape = (3, 4, 5)
+T[:, :, k] == w_k * u v^T for all k: True
+all slices are multiples of slice 0: True
+e1(x)e1(x)e1 + e2(x)e2(x)e2: slices
+ [[1. 0.]
+ [0. 0.]] 
+ [[0. 0.]
+ [0. 1.]]
+are its two slices multiples of each other? False
