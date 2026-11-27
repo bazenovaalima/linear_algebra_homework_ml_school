@@ -1,0 +1,24 @@
+=== Test 1: the 2x3 example ===
+[[ 1.  0.  1.]
+ [ 0.  1. -1.]] pivots = [0, 1]
+matches expected: True
+
+=== Test 2: the matrix F of Example 6.31 ===
+[[ 1.  0. -1.]
+ [ 0.  1.  2.]
+ [ 0.  0.  0.]] pivots = [0, 1]
+matches expected: True
+rank(F) = 2   null space basis: [array([ 1., -2.,  1.])]
+col space basis: [array([1., 4., 7.]), array([2., 5., 8.])]
+
+=== 20 random 5x7 matrices ===
+A @ v ~ 0 for all v in null_space_basis(A): True
+rank(A) + nullity(A) == 7 (rank-nullity):   True
+rank(A) == np.linalg.matrix_rank(A):        True
+ranks found: [5] (the maximum possible is min(5, 7) = 5)
+
+=== A 6x8 matrix of rank 4 ===
+rank(A) = 4   np.linalg.matrix_rank(A) = 4
+dim null(A) = 4   dim col(A) = 4
+max |A v| over the null space basis: 7.105427357601002e-15
+rank of the pivot columns of A: 4
